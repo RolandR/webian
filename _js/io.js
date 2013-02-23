@@ -26,7 +26,8 @@ $(document).ready(function(){
 		}
 		
 		function stdin(inputString){
-			stdout(prompt.html()+' '+inputString);
+			stdout(prompt.html() + ' ' + inputString);
+			input.val('');
 			stdout(inputString);
 		}
 		
