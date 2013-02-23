@@ -2,18 +2,27 @@
 <html>
 	<head>
 		<title>
-			Webian
+			user@webian:/
 		</title>
 		<link rel="stylesheet" type="text/css" href="./style.css" /> 
 		<script src="./_js/libs/jquery-1.7.min.js" type="text/javascript"></script>
-		<script src="./_js/io.js" type="text/javascript"></script>
+		
+		<script src="./_js/globalVars.js" type="text/javascript"></script>
+		<script src="./_js/fs.js" type="text/javascript"></script>
+		
+		<script src="./_js/programs/bash.js" type="text/javascript"></script>
+		<script src="./_js/programs/ls.js" type="text/javascript"></script>
+		<script src="./_js/programs/pwd.js" type="text/javascript"></script>
+		<script src="./_js/programs/cd.js" type="text/javascript"></script>
+		
+		
 	</head>
 	<body>
 		<div id="terminal">
 			<div id="output">
 			</div>
 			<div id="promptContainer">
-				<span id="prompt">user@webian:~$</span>
+				<span id="prompt"><span id="user">user@webian:</span><span id="wd">/</span>$</span>
 				<input id="textInput" />
 			</div>
 		</div>
