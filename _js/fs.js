@@ -118,20 +118,21 @@ function Fs(){
 	*/
 	function getFolderContents(path){
 		var path = path.split('/');
+		var pathArray = [];
 		for(var i in path){	//	Remove all empty elements
-			if(path[i] == ''){
-				path.splice(i, 1);
+			if(path[i] != ''){
+				pathArray.push(path[i]);
 			}
 		}
 		
+		path = pathArray;
+		
 		path.splice(0, 0, '/');	//	Add root directory (was removed as we split by '/')
 		
-		console.log(path);
 		
 		var navigatingIn = fsTree;
 		
 		for(var i in path){
-			console.log(navigatingIn);
 			var navigatingIn = getFileByName(path[i], navigatingIn).content;
 		}
 		

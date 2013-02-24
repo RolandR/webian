@@ -48,15 +48,20 @@ $(document).ready(function(){
 					cd(inputString);
 				break;
 				default:
-					if(inputString != ''){
-						stdout('bash: '+inputString.split(' ')[0]+': command not found');
+					if(inputString[0] != ''){
+						stdout('bash: '+inputString[0]+': command not found');
 					}
 				break;
 			}
 		}
 		
+		//	Standard error channel. Currently does almost the
+		//	same as stdout.
 		function stderr(errorString){
-			
+			output.append(
+				'<span class="outputLine error">'+arguments.callee.caller.name.toString()+ ': ' +errorString+'</span>'
+			);
+			terminal.scrollTop(100000); //	Scroll to bottom
 		}
 		
 		function getWorkingDir(){
