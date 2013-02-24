@@ -11,14 +11,19 @@ function ls(
 		dirToDisplay = bash.getWorkingDir() + args[1];
 	}
 	
-	var contents = fs.getFolderContents(dirToDisplay);
-	if(contents === undefined){
+	var file = fs.getFile(dirToDisplay);
+	if(file === undefined){
 		bash.stderr('cannot access '+args[1]+': No such file or directory');
 	} else {
-		for(i in contents){
-			bash.stdout(contents[i].name);
+		if(file.type != 'folder'){
+			bash.stdout(args[1]);
+		} else {
+			var content = file.content;
+			for(i in content){
+				bash.stdout(content[i].name);
+			}
 		}
 	}
 	
-	console.log(contents);
+	return file;
 }

@@ -11,7 +11,10 @@ $(document).ready(function(){
 	*/
 	function Bash(){
 		
-		var workingDir = '/';
+		var workingDir = '/';		
+		var activeUser = users.getUser('user');
+		setWorkingDir(activeUser.homeDir);
+		
 		
 		
 		// Output on the terminal.
@@ -27,11 +30,14 @@ $(document).ready(function(){
 			if ( event.which == 13 ) {
 				stdin(input.val());
 			}
+			if ( event.which == 9 ) {
+				return false;
+			}
 		});
 		
 		// Recieves input from the Enter keypress event for textInput
 		function stdin(inputString){
-			stdout(userElement.html() + workingDirElement.html() + '$ ' + inputString);
+			stdout(userElement.html() + hostElement.html() + workingDirElement.html() + '$ ' + inputString);
 			input.val('');
 			terminal.scrollTop(100000);
 			

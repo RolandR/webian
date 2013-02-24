@@ -56,7 +56,15 @@ function Fs(){
 							type: 'folder',
 							id: 7,
 							parentId: 6,
-							content: []
+							content: [
+								{
+									name: '.bash_history',
+									type: 'ASCII text',
+									id: 9,
+									parentId: 7,
+									fileContent: ''
+								}
+							]
 						},
 						{
 							name: 'otheruser',
@@ -112,11 +120,11 @@ function Fs(){
 	
 	/*
 	*	Takes a path like /home/user/Documents/ and returns
-	*	the fsTree directory of that location.
+	*	the fsTree file of that location.
 	*
 	*	Note: Path must start at root directory!
 	*/
-	function getFolderContents(path){
+	function getFile(path){
 		var path = path.split('/');
 		var pathArray = [];
 		for(var i in path){	//	Remove all empty elements
@@ -133,13 +141,21 @@ function Fs(){
 		var navigatingIn = fsTree;
 		
 		for(var i in path){
-			var navigatingIn = getFileByName(path[i], navigatingIn).content;
+			if(i != path.length - 1){
+				navigatingIn = getFileByName(path[i], navigatingIn).content;
+			} else {
+				navigatingIn = getFileByName(path[i], navigatingIn);
+			}
 		}
-		
 		return navigatingIn;
 	}
 	
+	function setFileContent(path, text){
+		
+	}
+	
 	return{
-			getFolderContents : getFolderContents
-		}
+		getFile : getFile,
+		setFileContent: setFileContent
+	}
 }
