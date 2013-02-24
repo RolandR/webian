@@ -15,31 +15,76 @@ $(document).ready(function(){
 		var activeUser = users.getUser('user');
 		setWorkingDir(activeUser.homeDir);
 		
-		
+		var histPosition = -1; 	//	Position in ~/.bash_history we're
+								//	currently using, counting from the bottom.
+		var enteredCommand = '';	//	Stores the last entered input when we navigate the bash history
 		
 		// Output on the terminal.
 		function stdout(outputString){
 			output.append(
-				'<span class="outputLine">'+outputString+'</span>'
+				'<pre><span class="outputLine">'+outputString+'</span></pre>'
 			);
-			terminal.scrollTop(100000); //	Scroll to bottom
+			terminal.scrollTop(1000000); //	Scroll to bottom
 		}
 		
 		//	Key event handler, calls stdin
-		input.keypress(function(event) {
-			if ( event.which == 13 ) {
+		input.keydown(function(event) {
+			if(event.which == 13){	//	Enter
 				stdin(input.val());
 			}
-			if ( event.which == 9 ) {
+			if(event.which == 9){	//	Tab
 				return false;
+			}
+			if(event.which == 38){	//	Up
+				event.preventDefault();
+				if(histPosition == -1){
+					enteredCommand = input.val();
+				}
+				histPosition++;
+				goToHistory(histPosition);
+			}
+			if(event.which == 40){	//	Down
+				event.preventDefault();
+				histPosition--;
+				if(histPosition < 0){
+					histPosition = -1;
+				}
+				goToHistory(histPosition);
 			}
 		});
 		
+		function goToHistory(position){
+			if(histPosition == -1){
+				input.val(enteredCommand);
+			} else {
+				var history = fs.getFile(activeUser.homeDir + '.bash_history').fileContent;
+				history = history.split('\n');
+				
+				var cleanedHistory = [];
+				var prevHistElement = '';
+				for(var i in history){	//	Remove all empty elements
+					if(history[i] != '' && history[i] != prevHistElement){
+						prevHistElement = history[i];
+						cleanedHistory.push(history[i]);
+					}
+				}
+				history = cleanedHistory;
+				
+				if(histPosition >= history.length){
+					histPosition = history.length - 1;
+				}
+				input.val(history[history.length - histPosition - 1]);
+			}
+		}
+		
 		// Recieves input from the Enter keypress event for textInput
 		function stdin(inputString){
+			histPosition = -1;
 			stdout(userElement.html() + hostElement.html() + workingDirElement.html() + '$ ' + inputString);
 			input.val('');
-			terminal.scrollTop(100000);
+			terminal.scrollTop(1000000);
+			
+			fs.addToFile(activeUser.homeDir + '.bash_history', inputString + '\n');
 			
 			inputString = inputString.split(' ');
 			
@@ -52,6 +97,9 @@ $(document).ready(function(){
 				break;
 				case 'cd':
 					cd(inputString);
+				break;
+				case 'cat':
+					cat(inputString);
 				break;
 				default:
 					if(inputString[0] != ''){
@@ -67,7 +115,7 @@ $(document).ready(function(){
 			output.append(
 				'<span class="outputLine error">'+arguments.callee.caller.name.toString()+ ': ' +errorString+'</span>'
 			);
-			terminal.scrollTop(100000); //	Scroll to bottom
+			terminal.scrollTop(1000000); //	Scroll to bottom
 		}
 		
 		function getWorkingDir(){

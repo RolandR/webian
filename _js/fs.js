@@ -150,12 +150,19 @@ function Fs(){
 		return navigatingIn;
 	}
 	
-	function setFileContent(path, text){
-		
+	function setFileContent(path, contentString){
+		var file = getFile(path);
+		file.fileContent = contentString;
+	}
+	
+	function addToFile(path, contentString){
+		var file = getFile(path);
+		file.fileContent += contentString;
 	}
 	
 	return{
-		getFile : getFile,
-		setFileContent: setFileContent
+		getFile: getFile,
+		setFileContent: setFileContent,
+		addToFile: addToFile
 	}
 }
