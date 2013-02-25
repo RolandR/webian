@@ -13,9 +13,15 @@ function cd(args){
 		targetDir += '/';
 	}
 	
-	if(fs.getFile(targetDir) != undefined){
-		bash.setWorkingDir(targetDir);
-	} else {
+	targetDir = fs.getFile(targetDir);
+	
+	if(targetDir== undefined ||
+			targetDir == null ||
+			targetDir == false){
 		bash.stderr(args[1]+': No such file or directory');
+	} else if(targetDir.type != 'file'){
+		bash.stderr(args[1]+': Not a directory');
+	} else {
+		bash.setWorkingDir(targetDir);
 	}
 }
