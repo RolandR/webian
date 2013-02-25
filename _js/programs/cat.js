@@ -1,16 +1,14 @@
 function cat(args){
-	var fileToRead = '';
+	var fileToRead = args[1];
 	
-	if(args[1] == undefined || args[1] == null){
-		fileToRead = bash.getWorkingDir();
-	} else if(args[1].charAt(0) == '/'){
-		fileToRead = args[1];
+	if(fileToRead == undefined || fileToRead == null){
+		return false;
 	} else {
-		fileToRead = bash.getWorkingDir() + args[1];
+		fileToRead = fs.makeProperPath(fileToRead);
 	}
 	
 	var file = fs.getFile(fileToRead);
-	if(file === undefined){
+	if(file== undefined || file == null || file == false){
 		bash.stderr(args[1]+': No such file or directory');
 	} else {
 		if(file.type == 'folder'){

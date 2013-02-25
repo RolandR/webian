@@ -1,27 +1,20 @@
 function cd(args){
-	var targetDir = '';
+	var targetPath = args[1];
 	
-	if(args[1] == undefined || args[1] == null){
-		targetDir = bash.getWorkingDir(); //	TODO: Change to user's home dir once users are implemented.
-	} else if(args[1].charAt(0) == '/'){
-		targetDir = args[1];
+	if(targetPath == undefined || targetPath == null){
+		targetPath = bash.getWorkingDir(); //	TODO: Change to user's home dir once users are implemented.
 	} else {
-		targetDir = bash.getWorkingDir() + args[1];
+		targetPath = fs.makeProperPath(targetPath);
 	}
 	
-	if(targetDir.charAt(targetDir.length) != '/'){
-		targetDir += '/';
-	}
+	var targetDir = fs.getFile(targetPath);
+	console.log(targetDir);
 	
-	targetDir = fs.getFile(targetDir);
-	
-	if(targetDir== undefined ||
-			targetDir == null ||
-			targetDir == false){
+	if(targetDir== undefined || targetDir == null || targetDir == false){
 		bash.stderr(args[1]+': No such file or directory');
-	} else if(targetDir.type != 'file'){
+	} else if(targetDir.type != 'folder'){
 		bash.stderr(args[1]+': Not a directory');
 	} else {
-		bash.setWorkingDir(targetDir);
+		bash.setWorkingDir(targetPath);
 	}
 }

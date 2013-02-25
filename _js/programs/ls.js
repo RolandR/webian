@@ -1,18 +1,16 @@
 function ls(
 	args
 ){
-	var dirToDisplay = '';
+	var dirToDisplay = args[1];
 	
-	if(args[1] == undefined || args[1] == null){
+	if(dirToDisplay == undefined || dirToDisplay == null){
 		dirToDisplay = bash.getWorkingDir();
-	} else if(args[1].charAt(0) == '/'){
-		dirToDisplay = args[1];
 	} else {
-		dirToDisplay = bash.getWorkingDir() + args[1];
+		dirToDisplay = fs.makeProperPath(dirToDisplay);
 	}
 	
 	var file = fs.getFile(dirToDisplay);
-	if(file === undefined){
+	if(file== undefined || file == null || file == false){
 		bash.stderr('cannot access '+args[1]+': No such file or directory');
 	} else {
 		if(file.type != 'folder'){

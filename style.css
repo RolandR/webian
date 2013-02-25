@@ -16,6 +16,7 @@
 	font-size: 16px;
 	padding: 5px;
 	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 .outputLine{
@@ -29,4 +30,5 @@
 	color: inherit;
 	font-family: inherit;
 	outline: none;
+	width: 400px;
 }

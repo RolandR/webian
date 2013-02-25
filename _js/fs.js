@@ -138,14 +138,24 @@ function Fs(){
 		path.splice(0, 0, '/');	//	Add root directory (was removed as we split by '/')
 		
 		
-		var navigatingIn = fsTree;
+		var navigatingIn = fsTree[0];
 		
-		for(var i in path){
-			if(i != path.length - 1){
-				navigatingIn = getFileByName(path[i], navigatingIn).content;
+		for(var i = 1; i < path.length; i++){
+			/*if(path[i] == '.'){
+			
+			} else if(path[i] == '..'){
+				navigatingIn = getFileById(navigatingIn.parentId, fsTree);
+				console.log(navigatingIn[0].parentId);
+				console.log(navigatingIn[0]);
 			} else {
-				navigatingIn = getFileByName(path[i], navigatingIn);
-			}
+				if(i != path.length - 1){
+					navigatingIn = getFileByName(path[i], navigatingIn).content;
+				} else {
+					navigatingIn = getFileByName(path[i], navigatingIn);
+				}
+			}*/
+			
+			navigatingIn = getFileByName(path[i], navigatingIn.content);
 		}
 		return navigatingIn;
 	}
@@ -160,9 +170,55 @@ function Fs(){
 		file.fileContent += contentString;
 	}
 	
+	function makeProperPath(target){
+		if(target.charAt(0) == '/'){
+			target = target;
+		} else {
+			target = bash.getWorkingDir() + target;
+		}
+		
+		/*
+		for(i in target){
+			var currentChar = target.charAt(i);
+			var prevChar = target.charAt(i-1);
+			if(!(currentChar == prevChar && currentChar == '/')){
+				properPath += currentChar;
+			} else {
+				//omit
+			}
+		}
+		*/
+		
+		var properPath = [];
+		var target = target.split('/');
+		for(var i in target){	//	Remove all empty elements
+			if(target[i] != '' && target[i] != '.'){
+				if(target[i] == '..'){
+					properPath.pop();
+				} else {
+					properPath.push(target[i]);
+				}
+			}
+		}
+		
+		properPath = properPath.join("/");
+		properPath = '/' + properPath;
+		if(properPath.length > 1){
+			properPath += '/';
+		}
+		/*
+		if(target.charAt(target.length) != '/'){
+			target += '/';
+		}
+		*/
+		
+		return properPath;
+	}
+	
 	return{
 		getFile: getFile,
 		setFileContent: setFileContent,
-		addToFile: addToFile
+		addToFile: addToFile,
+		makeProperPath: makeProperPath
 	}
 }

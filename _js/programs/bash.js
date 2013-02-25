@@ -16,7 +16,7 @@ $(document).ready(function(){
 		setWorkingDir(activeUser.homeDir);
 		
 		var histPosition = -1; 	//	Position in ~/.bash_history we're
-								//	currently using, counting from the bottom.
+							//	currently using, counting from the bottom.
 		var enteredCommand = '';	//	Stores the last entered input when we navigate the bash history
 		
 		// Output on the terminal.
@@ -101,6 +101,9 @@ $(document).ready(function(){
 				case 'cat':
 					cat(inputString);
 				break;
+				case 'clear':
+					clear(inputString);
+				break;
 				default:
 					if(inputString[0] != ''){
 						stdout('bash: '+inputString[0]+': command not found');
@@ -124,14 +127,23 @@ $(document).ready(function(){
 		
 		function setWorkingDir(newDir){
 			workingDir = newDir;
-			workingDirElement.html(workingDir.substring(0, workingDir.length - 1));
+			if(workingDir.length > 1 && workingDir.charAt(workingDir.length - 1) == '/'){
+				workingDirElement.html(workingDir.substring(0, workingDir.length - 1));
+			} else {
+				workingDirElement.html(workingDir);
+			}
+		}
+		
+		function clearScreen(){
+			output.html('');
 		}
 		
 		return{
-			stdout : stdout,
-			stderr : stderr,
-			getWorkingDir : getWorkingDir,
-			setWorkingDir: setWorkingDir
+			stdout: stdout,
+			stderr: stderr,
+			getWorkingDir: getWorkingDir,
+			setWorkingDir: setWorkingDir,
+			clearScreen: clearScreen
 		}
 	}
 });
