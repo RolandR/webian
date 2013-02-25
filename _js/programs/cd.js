@@ -1,5 +1,5 @@
 function cd(args){
-	var targetPath = args[1];
+	var targetPath = args[3];
 	
 	if(targetPath == undefined || targetPath == null){
 		targetPath = bash.getWorkingDir(); //	TODO: Change to user's home dir once users are implemented.
@@ -11,9 +11,9 @@ function cd(args){
 	console.log(targetDir);
 	
 	if(targetDir== undefined || targetDir == null || targetDir == false){
-		bash.stderr(args[1]+': No such file or directory');
+		bash.stderr(args[3]+': No such file or directory');
 	} else if(targetDir.type != 'folder'){
-		bash.stderr(args[1]+': Not a directory');
+		bash.stderr(args[3]+': Not a directory');
 	} else {
 		bash.setWorkingDir(targetPath);
 	}

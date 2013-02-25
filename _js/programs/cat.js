@@ -1,5 +1,5 @@
 function cat(args){
-	var fileToRead = args[1];
+	var fileToRead = args[3];
 	
 	if(fileToRead == undefined || fileToRead == null){
 		return false;
@@ -9,10 +9,10 @@ function cat(args){
 	
 	var file = fs.getFile(fileToRead);
 	if(file== undefined || file == null || file == false){
-		bash.stderr(args[1]+': No such file or directory');
+		bash.stderr(args[3]+': No such file or directory');
 	} else {
 		if(file.type == 'folder'){
-			bash.stderr(args[1]+': Is a directory');
+			bash.stderr(args[3]+': Is a directory');
 		} else {
 			var content = file.fileContent;
 			bash.stdout(content);

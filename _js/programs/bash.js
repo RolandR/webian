@@ -82,31 +82,59 @@ $(document).ready(function(){
 			histPosition = -1;
 			stdout(userElement.html() + hostElement.html() + workingDirElement.html() + '$ ' + inputString);
 			input.val('');
-			terminal.scrollTop(1000000);
+			terminal.scrollTop(1000000); //	Scroll to bottom
 			
-			fs.addToFile(activeUser.homeDir + '.bash_history', inputString + '\n');
+			fs.addToFile(activeUser.homeDir + '.bash_history', inputString + '\n'); //	Add entered command to ~/.bash_history
 			
 			inputString = inputString.split(' ');
 			
-			switch(inputString[0]){
+			var args = ['', '', []];
+			var flags = '';
+			var fullTextFlags = [];
+			for(i in inputString){
+				if(i == 0){
+					args[0] = inputString[0];
+				} else if(inputString[i].substring(0, 2) == '--'){
+					fullTextFlags.push(inputString[i].substring(2, inputString[i].length));
+				} else if(inputString[i].charAt(0) == '-'){
+					flags += inputString[i].substring(1, inputString[i].length);
+				} else {
+					args.push(inputString[i]);
+				}
+			}
+			
+			args[1] = flags;
+			args[2] = fullTextFlags;
+			
+			/*
+			
+			Format for args:
+			[0] function name
+			[1] single character flags (single string)
+			[2] full text flags (array)
+			[3 and up] other arguments
+			
+			*/
+			
+			switch(args[0]){
 				case 'ls':
-					ls(inputString);
+					ls(args);
 				break;
 				case 'pwd':
-					pwd(inputString);
+					pwd(args);
 				break;
 				case 'cd':
-					cd(inputString);
+					cd(args);
 				break;
 				case 'cat':
-					cat(inputString);
+					cat(args);
 				break;
 				case 'clear':
-					clear(inputString);
+					clear(args);
 				break;
 				default:
-					if(inputString[0] != ''){
-						stdout('bash: '+inputString[0]+': command not found');
+					if(args[0] != ''){
+						stdout('bash: '+args[0]+': command not found');
 					}
 				break;
 			}

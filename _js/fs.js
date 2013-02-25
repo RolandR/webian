@@ -7,40 +7,29 @@ function Fs(){
 		{
 			name: '/',
 			type: 'folder',
-			id: 0,
 			content: [
 				{
 					name: 'var',
 					type: 'folder',
-					id: 1,
-					parentId: 0,
 					content: [],
 				},
 				{
 					name: 'opt',
 					type: 'folder',
-					id: 2,
-					parentId: 0,
 					content: [],
 				},
 				{
 					name: 'etc',
 					type: 'folder',
-					id: 3,
-					parentId: 0,
 					content: [],
 				},
 				{
 					name: 'bin',
 					type: 'folder',
-					id: 4,
-					parentId: 0,
 					content: [
 						{
 							name: 'ls',
 							type: 'javascript',
-							id: 5,
-							parentId: 4,
 							jsLocation: './programs/ls.js'
 						}
 					]
@@ -48,29 +37,44 @@ function Fs(){
 				{
 					name: 'home',
 					type: 'folder',
-					id: 6,
-					parentId: 0,
 					content: [
 						{
 							name: 'user',
 							type: 'folder',
-							id: 7,
-							parentId: 6,
 							content: [
 								{
 									name: '.bash_history',
 									type: 'ASCII text',
-									id: 9,
-									parentId: 7,
 									fileContent: ''
+								},
+								{
+									name: 'welcome.txt',
+									type: 'ASCII text',
+									fileContent: '  Hello world!\n  This is a test file.'
+								},
+								{
+									name: 'license.txt',
+									type: 'ASCII text',
+									fileContent: '\nCopyright 2012 Roland Rytz\n\
+___________________________\n\
+\n\
+This program is free software: you can redistribute it and/or modify\n\
+it under the terms of the GNU General Public License as published by\n\
+the Free Software Foundation, either version 3 of the License, or\n\
+(at your option) any later version.\n\
+\n\
+This program is distributed in the hope that it will be useful,\n\
+but WITHOUT ANY WARRANTY; without even the implied warranty of\n\
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n\
+GNU General Public License for more details.\n\
+\n\
+See http://www.gnu.org/licenses/gpl-3.0.html for further information.\n\n'
 								}
 							]
 						},
 						{
 							name: 'otheruser',
 							type: 'folder',
-							id: 8,
-							parentId: 6,
 							content: []
 						}
 					]
@@ -82,7 +86,7 @@ function Fs(){
 	/*
 	*	Searches the entire given tree structure for an item with
 	*	the specified id.
-	*/
+	*
 	function getFileById(id, searchTree){
 		var currentlyProcessing;
 		for(var i in searchTree){
@@ -101,6 +105,7 @@ function Fs(){
 		}
 		return false;
 	}
+	*/
 	
 	/*
 	*	Searches the first level of the given tree structure
@@ -140,21 +145,7 @@ function Fs(){
 		
 		var navigatingIn = fsTree[0];
 		
-		for(var i = 1; i < path.length; i++){
-			/*if(path[i] == '.'){
-			
-			} else if(path[i] == '..'){
-				navigatingIn = getFileById(navigatingIn.parentId, fsTree);
-				console.log(navigatingIn[0].parentId);
-				console.log(navigatingIn[0]);
-			} else {
-				if(i != path.length - 1){
-					navigatingIn = getFileByName(path[i], navigatingIn).content;
-				} else {
-					navigatingIn = getFileByName(path[i], navigatingIn);
-				}
-			}*/
-			
+		for(var i = 1; i < path.length; i++){			
 			navigatingIn = getFileByName(path[i], navigatingIn.content);
 		}
 		return navigatingIn;
