@@ -20,7 +20,11 @@
 }
 
 .outputLine{
-	display: block;
+	/*display: block;*/
+}
+
+pre{
+	display: inline;
 }
 
 #textInput{
@@ -31,4 +35,13 @@
 	font-family: inherit;
 	outline: none;
 	width: 400px;
+}
+
+a{
+	color: inherit;
+	text-decoration: inherit;
+}
+
+span.colFolder{
+	color: #7799CC;
 }

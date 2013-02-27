@@ -14,24 +14,24 @@ function ls(
 	
 	var file = fs.getFile(dirToDisplay);
 	if(file== undefined || file == null || file == false){
-		bash.stderr('cannot access '+args[3]+': No such file or directory');
+		bash.stderr('cannot access '+args[3]+': No such file or directory'+'\n');
 	} else {
 		if(file.type != 'folder'){
-			bash.stdout(args[3]);
+			bash.stdout(args[3]+'\n');
 		} else {
 			if(aux.hasFlag(flags, 'a') || aux.hasStrFlag(strFlags, 'all')){
-				bash.stdout('.');
-				bash.stdout('..');
+				bash.stdout('.'+'\n');
+				bash.stdout('..'+'\n');
 			}
 			
 			var content = file.content;
 			for(i in content){
 				if(content[i].name.charAt(0) == '.'){
 					if(aux.hasFlag(flags, 'a') || aux.hasFlag(flags, 'A') || aux.hasStrFlag(strFlags, 'all') || aux.hasStrFlag(strFlags, 'almost-all')){
-						bash.stdout(content[i].name);
+						bash.stdout(content[i].name+'\n');
 					}
 				} else {
-					bash.stdout(content[i].name);
+					bash.stdout(content[i].name+'\n');
 				}
 			}
 		}

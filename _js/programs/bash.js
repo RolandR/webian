@@ -80,7 +80,7 @@ $(document).ready(function(){
 		// Recieves input from the Enter keypress event for textInput
 		function stdin(inputString){
 			histPosition = -1;
-			stdout(userElement.html() + hostElement.html() + workingDirElement.html() + '$ ' + inputString);
+			stdout(userElement.html() + hostElement.html() + workingDirElement.html() + '$ ' + inputString+'\n');
 			input.val('');
 			terminal.scrollTop(1000000); //	Scroll to bottom
 			
@@ -134,7 +134,7 @@ $(document).ready(function(){
 				break;
 				default:
 					if(args[0] != ''){
-						stdout('bash: '+args[0]+': command not found');
+						stdout('bash: '+args[0]+': command not found'+'\n');
 					}
 				break;
 			}

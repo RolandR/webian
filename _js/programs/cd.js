@@ -11,9 +11,9 @@ function cd(args){
 	console.log(targetDir);
 	
 	if(targetDir== undefined || targetDir == null || targetDir == false){
-		bash.stderr(args[3]+': No such file or directory');
+		bash.stderr(args[3]+': No such file or directory'+'\n');
 	} else if(targetDir.type != 'folder'){
-		bash.stderr(args[3]+': Not a directory');
+		bash.stderr(args[3]+': Not a directory'+'\n');
 	} else {
 		bash.setWorkingDir(targetPath);
 	}

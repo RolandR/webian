@@ -24,6 +24,23 @@ function Fs(){
 					content: [],
 				},
 				{
+					name: 'usr',
+					type: 'folder',
+					content: [
+						{
+							name: 'bin',
+							type: 'folder',
+							content: [
+								{
+									name: 'clear',
+									type: 'javascript',
+									jsLocation: './programs/clear.js'
+								}
+							]
+						}
+					]
+				},
+				{
 					name: 'bin',
 					type: 'folder',
 					content: [
@@ -31,6 +48,21 @@ function Fs(){
 							name: 'ls',
 							type: 'javascript',
 							jsLocation: './programs/ls.js'
+						},
+						{
+							name: 'bash',
+							type: 'javascript',
+							jsLocation: './programs/bash.js'
+						},
+						{
+							name: 'cat',
+							type: 'javascript',
+							jsLocation: './programs/cat.js'
+						},
+						{
+							name: 'cd',
+							type: 'javascript',
+							jsLocation: './programs/cd.js'
 						}
 					]
 				},
@@ -68,7 +100,12 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of\n\
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n\
 GNU General Public License for more details.\n\
 \n\
-See http://www.gnu.org/licenses/gpl-3.0.html for further information.\n\n'
+See <a href="http://www.gnu.org/licenses/gpl-3.0.html">http://www.gnu.org/licenses/gpl-3.0.html</a> for further information.\n\n'
+								},
+								{
+									name: '-x',
+									type: 'ASCII text',
+									fileContent: 'This file has a stupid name.'
 								}
 							]
 						},

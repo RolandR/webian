@@ -1,3 +1,3 @@
 function pwd(args){
-	bash.stdout(bash.getWorkingDir());
+	bash.stdout(bash.getWorkingDir()+'\n');
 }

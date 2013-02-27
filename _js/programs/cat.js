@@ -9,13 +9,13 @@ function cat(args){
 	
 	var file = fs.getFile(fileToRead);
 	if(file== undefined || file == null || file == false){
-		bash.stderr(args[3]+': No such file or directory');
+		bash.stderr(args[3]+': No such file or directory'+'\n');
 	} else {
 		if(file.type == 'folder'){
-			bash.stderr(args[3]+': Is a directory');
+			bash.stderr(args[3]+': Is a directory'+'\n');
 		} else {
 			var content = file.fileContent;
-			bash.stdout(content);
+			bash.stdout(content+'\n');
 		}
 	}
 	
