@@ -19,19 +19,28 @@ function ls(
 		if(file.type != 'folder'){
 			bash.stdout(args[3]+'\n');
 		} else {
-			if(aux.hasFlag(flags, 'a') || aux.hasStrFlag(strFlags, 'all')){
-				bash.stdout('.'+'\n');
-				bash.stdout('..'+'\n');
-			}
 			
 			var content = file.content;
+			var filename;
 			for(i in content){
-				if(content[i].name.charAt(0) == '.'){
-					if(aux.hasFlag(flags, 'a') || aux.hasFlag(flags, 'A') || aux.hasStrFlag(strFlags, 'all') || aux.hasStrFlag(strFlags, 'almost-all')){
-						bash.stdout(content[i].name+'\n');
+				filename = content[i].name;
+				
+				if(filename == '.' || filename == '..'){
+					if(	   aux.hasFlag(flags, 'a')
+						|| aux.hasStrFlag(strFlags, 'all'))
+					{
+						bash.stdout(filename+'\n');
+					}
+				} else if(filename.charAt(0) == '.'){
+					if(	   aux.hasFlag(flags, 'a')
+						|| aux.hasFlag(flags, 'A')
+						|| aux.hasStrFlag(strFlags, 'all')
+						|| aux.hasStrFlag(strFlags, 'almost-all'))
+					{
+						bash.stdout(filename+'\n');
 					}
 				} else {
-					bash.stdout(content[i].name+'\n');
+					bash.stdout(filename+'\n');
 				}
 			}
 		}

@@ -1,5 +1,10 @@
 var fs = new Fs();
 
+/*
+*	Fs handles all direct interaction with the filesystem, which
+*	is represented by fsTree, a JSON data structure.
+*	Data in fsTree can be accessed with normal unix paths.
+*/
 function Fs(){
 	var workingDir = '/';
 	
@@ -8,6 +13,14 @@ function Fs(){
 			name: '/',
 			type: 'folder',
 			content: [
+				{
+					name: '.',
+					type: 'folder'
+				},
+				{
+					name: '..',
+					type: 'folder'
+				},
 				{
 					name: 'var',
 					type: 'folder',
@@ -28,9 +41,25 @@ function Fs(){
 					type: 'folder',
 					content: [
 						{
+							name: '.',
+							type: 'folder'
+						},
+						{
+							name: '..',
+							type: 'folder'
+						},
+						{
 							name: 'bin',
 							type: 'folder',
 							content: [
+								{
+									name: '.',
+									type: 'folder'
+								},
+								{
+									name: '..',
+									type: 'folder'
+								},
 								{
 									name: 'clear',
 									type: 'javascript',
@@ -44,6 +73,14 @@ function Fs(){
 					name: 'bin',
 					type: 'folder',
 					content: [
+						{
+							name: '.',
+							type: 'folder'
+						},
+						{
+							name: '..',
+							type: 'folder'
+						},
 						{
 							name: 'ls',
 							type: 'javascript',
@@ -71,9 +108,39 @@ function Fs(){
 					type: 'folder',
 					content: [
 						{
+							name: '.',
+							type: 'folder'
+						},
+						{
+							name: '..',
+							type: 'folder'
+						},
+						{
 							name: 'user',
 							type: 'folder',
 							content: [
+								{
+									name: '.',
+									type: 'folder'
+								},
+								{
+									name: '..',
+									type: 'folder'
+								},
+								{
+									name: 'stuff',
+									type: 'folder',
+									content: [
+										{
+											name: '.',
+											type: 'folder'
+										},
+										{
+											name: '..',
+											type: 'folder'
+										}
+									]
+								},
 								{
 									name: '.bash_history',
 									type: 'ASCII text',
@@ -112,37 +179,22 @@ See <a href="http://www.gnu.org/licenses/gpl-3.0.html">http://www.gnu.org/licens
 						{
 							name: 'otheruser',
 							type: 'folder',
-							content: []
+							content: [
+								{
+									name: '.',
+									type: 'folder'
+								},
+								{
+									name: '..',
+									type: 'folder'
+								}
+							]
 						}
 					]
 				}
 			]
 		}
 	];
-	
-	/*
-	*	Searches the entire given tree structure for an item with
-	*	the specified id.
-	*
-	function getFileById(id, searchTree){
-		var currentlyProcessing;
-		for(var i in searchTree){
-			currentlyProcessing = searchTree[i];
-			
-			if(currentlyProcessing.id == id){
-				return currentlyProcessing;
-			}
-			
-			if(currentlyProcessing.content != null && currentlyProcessing.content.length > 0){
-				var foundItem = getFileById(id, currentlyProcessing.content);
-				if(foundItem != false){
-					return foundItem;
-				}
-			}
-		}
-		return false;
-	}
-	*/
 	
 	/*
 	*	Searches the first level of the given tree structure
@@ -164,7 +216,8 @@ See <a href="http://www.gnu.org/licenses/gpl-3.0.html">http://www.gnu.org/licens
 	*	Takes a path like /home/user/Documents/ and returns
 	*	the fsTree file of that location.
 	*
-	*	Note: Path must start at root directory!
+	*	Note: Path must start at root directory, format it
+	*	with makeProperPath() first!
 	*/
 	function getFile(path){
 		var path = path.split('/');
@@ -188,39 +241,72 @@ See <a href="http://www.gnu.org/licenses/gpl-3.0.html">http://www.gnu.org/licens
 		return navigatingIn;
 	}
 	
+	/*
+	*	Replaces the content of the file at the submitted
+	*	path with the submitted content string.
+	*	The file must not be a directory.
+	*/
 	function setFileContent(path, contentString){
 		var file = getFile(path);
-		file.fileContent = contentString;
+		if(file.type != 'folder'){
+			file.fileContent = contentString;
+		} else {
+			return false;
+		}
 	}
 	
+	/*
+	*	Adds to the end of the file at the submitted
+	*	path with the submitted content string.
+	*	The file must not be a directory.
+	*/
 	function addToFile(path, contentString){
 		var file = getFile(path);
-		file.fileContent += contentString;
+		if(file.type != 'folder'){
+			file.fileContent += contentString;
+		} else {
+			return false;
+		}
 	}
 	
+	/*
+	*	Takes any path and makes it a path starting at
+	*	the root directory which can be used to navigate
+	*	fsTree.
+	*	. and .. are interpreted here, so something like
+	*	/home/user/../otheruser will become /home/otheruser
+	*/
 	function makeProperPath(target){
 		if(target.charAt(0) == '/'){
 			target = target;
-		} else {
+		} else if(target.charAt(0) != '~'){
 			target = bash.getWorkingDir() + target;
 		}
 		
-		/*
-		for(i in target){
-			var currentChar = target.charAt(i);
-			var prevChar = target.charAt(i-1);
-			if(!(currentChar == prevChar && currentChar == '/')){
-				properPath += currentChar;
-			} else {
-				//omit
-			}
-		}
-		*/
+		target = properlySplitPath(target);
 		
+		target = target.join("/");
+		target = '/' + target;
+		if(target.length > 1){	//	So / wouldn't become //
+			target += '/';
+		}
+		
+		console.log(target);
+		
+		return target;
+	}
+	
+	function properlySplitPath(target){
 		var properPath = [];
 		var target = target.split('/');
-		for(var i in target){	//	Remove all empty elements
-			if(target[i] != '' && target[i] != '.'){
+		for(var i in target){
+			if(i == 0 && target[i] == '~'){
+				var homeDir = bash.getActiveUser().homeDir;
+				homeDir = properlySplitPath(homeDir);
+				for(var h in homeDir){
+					properPath.push(homeDir[h]);
+				}
+			} else if(target[i] != '' && target[i] != '.'){
 				if(target[i] == '..'){
 					properPath.pop();
 				} else {
@@ -228,17 +314,6 @@ See <a href="http://www.gnu.org/licenses/gpl-3.0.html">http://www.gnu.org/licens
 				}
 			}
 		}
-		
-		properPath = properPath.join("/");
-		properPath = '/' + properPath;
-		if(properPath.length > 1){
-			properPath += '/';
-		}
-		/*
-		if(target.charAt(target.length) != '/'){
-			target += '/';
-		}
-		*/
 		
 		return properPath;
 	}

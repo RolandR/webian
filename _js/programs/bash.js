@@ -2,22 +2,27 @@ var bash;
 
 $(document).ready(function(){
 	
-	$('#textInput').focus();
+	input.focus();
 	
 	bash = new Bash();
 	
 	/*
 	*	Bash handles all in/output from and to the terminal.
+	*	It supports using previously entered commands, which
+	*	are stored in ~./bash_history.
 	*/
 	function Bash(){
 		
-		var workingDir = '/';		
+		var workingDir = '/';
 		var activeUser = users.getUser('user');
 		setWorkingDir(activeUser.homeDir);
 		
 		var histPosition = -1; 	//	Position in ~/.bash_history we're
 							//	currently using, counting from the bottom.
-		var enteredCommand = '';	//	Stores the last entered input when we navigate the bash history
+							//	Is -1 if we aren't using the history currently.
+							
+		var enteredCommand = '';	//	Stores the last entered input when we navigate 
+							//	the bash history
 		
 		// Output on the terminal.
 		function stdout(outputString){
@@ -144,7 +149,7 @@ $(document).ready(function(){
 		//	same as stdout.
 		function stderr(errorString){
 			output.append(
-				'<span class="outputLine error">'+arguments.callee.caller.name.toString()+ ': ' +errorString+'</span>'
+				'<pre><span class="outputLine error">'+arguments.callee.caller.name.toString()+ ': ' +errorString+'</span></pre>'
 			);
 			terminal.scrollTop(1000000); //	Scroll to bottom
 		}
@@ -153,17 +158,31 @@ $(document).ready(function(){
 			return workingDir;
 		}
 		
+		/*
+		*	Changes the current working directory to newDir.
+		*/
 		function setWorkingDir(newDir){
 			workingDir = newDir;
 			if(workingDir.length > 1 && workingDir.charAt(workingDir.length - 1) == '/'){
+				//Do not display a path's last '/'
 				workingDirElement.html(workingDir.substring(0, workingDir.length - 1));
 			} else {
 				workingDirElement.html(workingDir);
 			}
 		}
 		
+		/*
+		*	Empties the output element.
+		*/		
 		function clearScreen(){
 			output.html('');
+		}
+		
+		/*
+		*	Return's the active user object.
+		*/
+		function getActiveUser(){
+			return activeUser;
 		}
 		
 		return{
@@ -171,7 +190,8 @@ $(document).ready(function(){
 			stderr: stderr,
 			getWorkingDir: getWorkingDir,
 			setWorkingDir: setWorkingDir,
-			clearScreen: clearScreen
+			clearScreen: clearScreen,
+			getActiveUser: getActiveUser
 		}
 	}
 });
