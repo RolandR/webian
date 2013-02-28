@@ -38,7 +38,7 @@ $(document).ready(function(){
 				stdin(input.val());
 			}
 			if(event.which == 9){	//	Tab
-				return false;
+				event.preventDefault();
 			}
 			if(event.which == 38){	//	Up
 				event.preventDefault();
@@ -163,12 +163,17 @@ $(document).ready(function(){
 		*/
 		function setWorkingDir(newDir){
 			workingDir = newDir;
-			if(workingDir.length > 1 && workingDir.charAt(workingDir.length - 1) == '/'){
-				//Do not display a path's last '/'
-				workingDirElement.html(workingDir.substring(0, workingDir.length - 1));
-			} else {
-				workingDirElement.html(workingDir);
+			
+			if(newDir.substring(0, activeUser.homeDir.length) == activeUser.homeDir){
+				var newDir = newDir.replace(activeUser.homeDir, '~/');
 			}
+			
+			if(newDir.length > 1 && newDir.charAt(newDir.length - 1) == '/'){
+				//Do not display a path's last '/'
+				newDir = newDir.substring(0, newDir.length - 1);
+			}
+			
+			workingDirElement.html(newDir);
 		}
 		
 		/*
@@ -179,7 +184,7 @@ $(document).ready(function(){
 		}
 		
 		/*
-		*	Return's the active user object.
+		*	Returns the active user object.
 		*/
 		function getActiveUser(){
 			return activeUser;

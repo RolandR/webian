@@ -296,6 +296,9 @@ See <a href="http://www.gnu.org/licenses/gpl-3.0.html">http://www.gnu.org/licens
 		return target;
 	}
 	
+	/*
+	*	Splits the path and applies stuff like . and .. and ~
+	*/
 	function properlySplitPath(target){
 		var properPath = [];
 		var target = target.split('/');
