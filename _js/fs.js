@@ -62,8 +62,8 @@ function Fs(){
 								},
 								{
 									name: 'clear',
-									type: 'javascript',
-									jsLocation: './programs/clear.js'
+									type: 'executable, javascript',
+									jsLocation: './_js/programs/clear.js'
 								}
 							]
 						}
@@ -83,23 +83,30 @@ function Fs(){
 						},
 						{
 							name: 'ls',
-							type: 'javascript',
-							jsLocation: './programs/ls.js'
+							type: 'executable, javascript',
+							jsLocation: './_js/programs/ls.js'
 						},
 						{
 							name: 'bash',
-							type: 'javascript',
-							jsLocation: './programs/bash.js'
+							type: 'executable, javascript',
+							jsLocation: './_js/programs/bash.js'
 						},
 						{
 							name: 'cat',
-							type: 'javascript',
-							jsLocation: './programs/cat.js'
+							type: 'executable, javascript',
+							jsLocation: './_js/programs/cat.js'
 						},
 						{
 							name: 'cd',
-							type: 'javascript',
-							jsLocation: './programs/cd.js'
+							type: 'executable, javascript',
+							jsLocation: './_js/programs/cd.js'
+						},
+						{
+							name: 'test',
+							type: 'NOTexecutable, javascript',
+							jsLocation: './_js/programs/none.js',
+							fileContent: 'bash.stdout(args[3]+"\\n");',
+							execute: false
 						}
 					]
 				},
@@ -255,6 +262,15 @@ See <a href="http://www.gnu.org/licenses/gpl-3.0.html">http://www.gnu.org/licens
 		}
 	}
 	
+	function setExecute(path, newFunction){
+		var file = getFile(path);
+		if(file.type != 'folder'){
+			file.execute = newFunction;
+		} else {
+			return false;
+		}
+	}
+	
 	/*
 	*	Adds to the end of the file at the submitted
 	*	path with the submitted content string.
@@ -291,8 +307,6 @@ See <a href="http://www.gnu.org/licenses/gpl-3.0.html">http://www.gnu.org/licens
 			target += '/';
 		}
 		
-		console.log(target);
-		
 		return target;
 	}
 	
@@ -321,9 +335,15 @@ See <a href="http://www.gnu.org/licenses/gpl-3.0.html">http://www.gnu.org/licens
 		return properPath;
 	}
 	
+	function find(name, type){
+		//let's ignore name for now, shall we?
+		
+	}
+	
 	return{
 		getFile: getFile,
 		setFileContent: setFileContent,
+		setExecute: setExecute,
 		addToFile: addToFile,
 		makeProperPath: makeProperPath
 	}

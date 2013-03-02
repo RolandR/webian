@@ -1,6 +1,4 @@
-function ls(
-	args
-){
+
 	var flags = args[1];
 	var strFlags = args[2];
 	
@@ -45,6 +43,3 @@ function ls(
 			}
 		}
 	}
-	
-	return file;
-}

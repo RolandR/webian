@@ -1,4 +1,4 @@
-function cat(args){
+
 	var fileToRead = args[3];
 	
 	if(fileToRead == undefined || fileToRead == null){
@@ -20,4 +20,4 @@ function cat(args){
 	}
 	
 	return file;
-}
+

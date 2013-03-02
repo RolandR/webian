@@ -1,4 +1,4 @@
-function cd(args){
+
 	var targetPath = args[3];
 	
 	if(targetPath == undefined || targetPath == null){
@@ -16,4 +16,4 @@ function cd(args){
 	} else {
 		bash.setWorkingDir(targetPath);
 	}
-}
+

@@ -122,24 +122,14 @@ $(document).ready(function(){
 			*/
 			
 			switch(args[0]){
-				case 'ls':
-					ls(args);
-				break;
-				case 'pwd':
-					pwd(args);
-				break;
-				case 'cd':
-					cd(args);
-				break;
-				case 'cat':
-					cat(args);
-				break;
-				case 'clear':
-					clear(args);
-				break;
 				default:
-					if(args[0] != ''){
-						stdout('bash: '+args[0]+': command not found'+'\n');
+					var file = fs.getFile(fs.makeProperPath(args[0]));
+					if(file == undefined || file == false){
+						stderr(args[0]+': No such file or directory\n');
+					} else if(file.type != 'executable, javascript'){
+						stderr(args[0]+': command not found\n');
+					} else {
+						file.execute(args);
 					}
 				break;
 			}
@@ -174,6 +164,7 @@ $(document).ready(function(){
 			}
 			
 			workingDirElement.html(newDir);
+			windowTitle.html(userElement.html() + hostElement.html() + workingDirElement.html());
 		}
 		
 		/*

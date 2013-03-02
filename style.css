@@ -45,3 +45,11 @@ a{
 span.colFolder{
 	color: #7799CC;
 }
+
+span.sysout{
+	color: #AAAAAA;
+}
+
+span.syserr{
+	color: #FF0000;
+}
